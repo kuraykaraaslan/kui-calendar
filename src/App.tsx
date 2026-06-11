@@ -84,6 +84,8 @@ export default function App() {
       brand="KUI Calendar"
       version="v0.0.1"
       link={{ href: "https://kuray.dev", label: "kuray.dev" }}
+      github="https://github.com/kuraykaraaslan/kui-calendar"
+      npm="https://www.npmjs.com/package/@kuraykaraaslan/kui-calendar"
       sidebarTitle="Calendar"
       sidebarCount={`${SAMPLE_EVENTS.length} events`}
       sidebar={sidebar}

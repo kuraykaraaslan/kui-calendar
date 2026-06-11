@@ -1,13 +1,17 @@
 import { type ReactNode, useEffect, useRef, useState } from "react";
+import "./demo-shell.css";
 import { useTheme, type ThemePreference } from "./useTheme";
 
 /**
  * DemoShell — the shared demo "theme" for the KUI component family, ported
- * from the KUIviewer demo (topbar + brand + version + theme switcher,
- * collapsible left panel, main stage, bottom status bar). Styled entirely
- * with the Tailwind tokens already defined in globals.css so it flips with
- * the .dark class. Each demo (Calendar / Gantt / Player) drops its component
- * into the stage and fills the side panel + status bar with relevant content.
+ * VERBATIM from the KUIviewer demo (topbar + brand + version + theme switcher,
+ * collapsible left panel, main stage, bottom status bar).
+ *
+ * Styled entirely by demo-shell.css (pure CSS + its own theme variables) so the
+ * chrome renders identically to the viewer regardless of how the host Tailwind
+ * build resolves custom tokens. Dark mode flips via [data-theme="dark"], which
+ * useTheme sets on <html>. Each demo (Calendar / Gantt / Player) drops its
+ * component into the stage and fills the side panel + status bar.
  */
 
 export type StatusTone = "idle" | "loading" | "ready" | "error";
@@ -21,6 +25,10 @@ export interface DemoShellProps {
   logo?: string;
   /** Optional external link shown on the left of the action group. */
   link?: { href: string; label: string };
+  /** GitHub repo URL — rendered as a labelled icon link in the topbar. */
+  github?: string;
+  /** npm package page URL — rendered as a labelled icon link in the topbar. */
+  npm?: string;
   /** Extra topbar action buttons (rendered before the theme switcher). */
   actions?: ReactNode;
   /** Left-panel header title. */
@@ -39,49 +47,34 @@ export interface DemoShellProps {
 
 /* ---------- icons (inline so the shell has no asset deps) ---------- */
 
-const Icon = ({ d, ...p }: { d: string } & React.SVGProps<SVGSVGElement>) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={2}
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...p}
-  >
-    <path d={d} />
-  </svg>
-);
-
 const SunIcon = (p: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...p}>
+  <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...p}>
     <circle cx="12" cy="12" r="4" />
-    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+    <path d="M12 2v2" /><path d="M12 20v2" /><path d="M4.93 4.93l1.41 1.41" /><path d="M17.66 17.66l1.41 1.41" />
+    <path d="M2 12h2" /><path d="M20 12h2" /><path d="M4.93 19.07l1.41-1.41" /><path d="M17.66 6.34l1.41-1.41" />
   </svg>
 );
 const MoonIcon = (p: React.SVGProps<SVGSVGElement>) => (
-  <Icon d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" {...p} />
+  <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...p}>
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+  </svg>
 );
 const SystemIcon = (p: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...p}>
+  <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...p}>
     <rect x="2" y="3" width="20" height="14" rx="2" />
     <line x1="8" y1="21" x2="16" y2="21" />
     <line x1="12" y1="17" x2="12" y2="21" />
   </svg>
 );
-const ChevronDown = (p: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...p}>
-    <polyline points="6 9 12 15 18 9" />
+
+const GitHubIcon = (p: React.SVGProps<SVGSVGElement>) => (
+  <svg className="icon" viewBox="0 0 24 24" fill="currentColor" {...p}>
+    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23a11.5 11.5 0 0 1 3.003-.404c1.018.005 2.045.138 3.003.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.91 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
   </svg>
 );
-const ChevronLeft = (p: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...p}>
-    <polyline points="15 18 9 12 15 6" />
-  </svg>
-);
-const Check = (p: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" {...p}>
-    <polyline points="20 6 9 17 4 12" />
+const NpmIcon = (p: React.SVGProps<SVGSVGElement>) => (
+  <svg className="icon" viewBox="0 0 24 24" fill="currentColor" {...p}>
+    <path d="M1.763 0C.786 0 0 .786 0 1.763v20.474C0 23.214.786 24 1.763 24h20.474c.977 0 1.763-.786 1.763-1.763V1.763C24 .786 23.214 0 22.237 0zM5.13 5.323l13.837.019-.009 13.836h-3.464l.01-10.382h-3.456L12.04 19.17H5.113z" />
   </svg>
 );
 
@@ -94,7 +87,7 @@ const THEME_OPTIONS: ThemeOption[] = [
   SYSTEM_OPTION,
 ];
 
-/* ---------- theme switcher ---------- */
+/* ---------- theme switcher (viewer markup: .theme-switcher / .theme-menu) ---------- */
 
 function ThemeSwitcher() {
   const { preference, setTheme } = useTheme();
@@ -119,9 +112,10 @@ function ThemeSwitcher() {
   const CurrentIcon = current.Icon;
 
   return (
-    <div className="relative" ref={ref}>
+    <div className="theme-switcher" ref={ref}>
       <button
         type="button"
+        className="theme-trigger"
         aria-haspopup="menu"
         aria-expanded={open}
         title="Toggle theme"
@@ -129,54 +123,41 @@ function ThemeSwitcher() {
           e.stopPropagation();
           setOpen((v) => !v);
         }}
-        className="flex h-8 items-center gap-1.5 rounded-md border border-border px-2.5 text-[12.5px] font-medium text-text-secondary transition-colors hover:border-border-strong hover:bg-surface-overlay hover:text-text-primary"
       >
-        <CurrentIcon className="h-[15px] w-[15px]" />
-        <span className="hidden sm:inline">{current.label}</span>
-        <ChevronDown className="h-3 w-3 opacity-70" />
+        <CurrentIcon />
+        <span className="label">{current.label}</span>
+        <svg className="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
       </button>
-      {open && (
-        <div
-          role="menu"
-          className="absolute right-0 top-[calc(100%+6px)] z-50 flex min-w-[160px] flex-col gap-0.5 rounded-xl border border-border bg-surface-raised p-1 shadow-lg"
-        >
-          {THEME_OPTIONS.map(({ value, label, Icon: OptIcon }) => {
-            const active = value === preference;
-            return (
-              <button
-                key={value}
-                type="button"
-                role="menuitemradio"
-                aria-checked={active}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setTheme(value);
-                  setOpen(false);
-                }}
-                className={`flex items-center gap-2.5 rounded-md px-2.5 py-2 text-left text-[12.5px] transition-colors hover:bg-surface-overlay ${
-                  active ? "text-primary" : "text-text-primary"
-                }`}
-              >
-                <OptIcon className={`h-[15px] w-[15px] ${active ? "text-primary" : "text-text-secondary"}`} />
-                <span>{label}</span>
-                {active && <Check className="ml-auto h-3.5 w-3.5 text-primary" />}
-              </button>
-            );
-          })}
-        </div>
-      )}
+      <div className="theme-menu" data-open={open} role="menu">
+        {THEME_OPTIONS.map(({ value, label, Icon: OptIcon }) => {
+          const active = value === preference;
+          return (
+            <button
+              key={value}
+              type="button"
+              className="theme-item"
+              role="menuitemradio"
+              aria-checked={active}
+              onClick={(e) => {
+                e.stopPropagation();
+                setTheme(value);
+                setOpen(false);
+              }}
+            >
+              <OptIcon />
+              <span>{label}</span>
+              <svg className="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
-
-/* ---------- status dot tones ---------- */
-
-const DOT_TONE: Record<StatusTone, string> = {
-  idle: "bg-text-disabled",
-  loading: "bg-primary animate-pulse",
-  ready: "bg-success",
-  error: "bg-error",
-};
 
 /* ---------- shell ---------- */
 
@@ -185,6 +166,8 @@ export default function DemoShell({
   version,
   logo = "K",
   link,
+  github,
+  npm,
   actions,
   sidebarTitle = "Demo",
   sidebarCount,
@@ -197,33 +180,44 @@ export default function DemoShell({
   const hasSidebar = sidebar != null;
   const tone = status?.tone ?? "idle";
 
+  const shellClass = [
+    "shell",
+    "demo-shell",
+    !hasSidebar ? "no-left" : collapsed ? "left-collapsed" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <div className="flex h-screen w-screen flex-col overflow-hidden bg-surface-base text-text-primary">
-      {/* Topbar */}
-      <header className="z-10 flex h-12 items-center gap-3 border-b border-border bg-surface-raised/85 px-5 backdrop-blur-md backdrop-saturate-150">
-        <div className="flex items-center gap-2.5 text-sm font-semibold tracking-tight">
-          <span className="grid h-[26px] w-[26px] place-items-center rounded-lg bg-gradient-to-br from-primary to-[#a78bfa] text-xs font-bold text-primary-fg shadow-[0_2px_6px_rgba(96,165,250,0.25)]">
-            {logo}
-          </span>
+    <div className={shellClass}>
+      {/* Top bar */}
+      <header className="topbar">
+        <div className="brand">
+          <span className="logo">{logo}</span>
           <span>{brand}</span>
-          <span className="ml-1 rounded-full bg-surface-overlay px-2 py-0.5 font-mono text-[10.5px] font-medium text-text-secondary">
-            {version}
-          </span>
+          <span className="version">{version}</span>
         </div>
-        <div className="flex-1" />
-        <div className="flex items-center gap-1.5">
+        <div className="topbar-spacer" />
+        <div className="topbar-actions">
           {link && (
-            <a
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex h-8 items-center gap-1.5 rounded-md px-3 text-[12.5px] font-medium text-text-secondary transition-colors hover:bg-surface-overlay hover:text-text-primary"
-            >
-              <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <a className="btn ghost" href={link.href} target="_blank" rel="noopener noreferrer" title={link.label}>
+              <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
                 <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
               </svg>
               {link.label}
+            </a>
+          )}
+          {github && (
+            <a className="btn ghost" href={github} target="_blank" rel="noopener noreferrer" title="GitHub repository">
+              <GitHubIcon />
+              GitHub
+            </a>
+          )}
+          {npm && (
+            <a className="btn ghost" href={npm} target="_blank" rel="noopener noreferrer" title="npm package">
+              <NpmIcon />
+              npm
             </a>
           )}
           {actions}
@@ -231,60 +225,45 @@ export default function DemoShell({
         </div>
       </header>
 
-      {/* Body: sidebar + stage */}
-      <div className="flex min-h-0 flex-1">
-        {hasSidebar && (
-          <aside
-            className={`flex flex-col border-r border-border bg-surface-raised transition-[width] duration-200 ${
-              collapsed ? "w-10" : "w-[280px]"
-            }`}
-          >
-            <div className="flex min-h-[44px] items-center gap-2 border-b border-border px-3.5">
-              {!collapsed && (
-                <>
-                  <span className="text-[13px] font-semibold tracking-tight">{sidebarTitle}</span>
-                  {sidebarCount != null && (
-                    <span className="rounded-full bg-surface-overlay px-2 py-px text-[10.5px] font-medium text-text-secondary">
-                      {sidebarCount}
-                    </span>
-                  )}
-                  <span className="flex-1" />
-                </>
-              )}
-              <button
-                type="button"
-                title={collapsed ? "Expand panel" : "Collapse panel"}
-                aria-label="Toggle panel"
-                onClick={() => setCollapsed((v) => !v)}
-                className={`grid h-[26px] w-[26px] place-items-center rounded-md text-text-secondary transition-colors hover:bg-surface-overlay hover:text-text-primary ${
-                  collapsed ? "mx-auto" : ""
-                }`}
-              >
-                <ChevronLeft className={`h-3.5 w-3.5 transition-transform ${collapsed ? "rotate-180" : ""}`} />
-              </button>
-            </div>
-            {!collapsed && <div className="flex-1 overflow-auto p-3">{sidebar}</div>}
-          </aside>
-        )}
+      {/* Left panel */}
+      {hasSidebar && (
+        <aside className={`panel left${collapsed ? " collapsed" : ""}`}>
+          <div className="panel-header">
+            <span className="title-text">{sidebarTitle}</span>
+            {sidebarCount != null && <span className="count">{sidebarCount}</span>}
+            <span className="spacer" />
+            <button
+              type="button"
+              className="collapse-btn"
+              title={collapsed ? "Expand panel" : "Collapse panel"}
+              aria-label="Toggle panel"
+              onClick={() => setCollapsed((v) => !v)}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+          </div>
+          <div className="panel-body">{sidebar}</div>
+        </aside>
+      )}
 
-        <main className={`relative min-w-0 flex-1 overflow-auto bg-surface-base ${stageClassName}`}>
-          {children}
-        </main>
-      </div>
+      {/* Stage */}
+      <main className={`stage ${stageClassName}`}>{children}</main>
 
       {/* Bottom status bar */}
-      <footer className="flex h-7 items-center gap-3 border-t border-border bg-surface-raised px-4 text-[11.5px] text-text-secondary">
-        <span className={`h-2 w-2 rounded-full ${DOT_TONE[tone]}`} />
+      <footer className={`bottombar ${tone}`}>
+        <span className="dot" />
         <span>{status?.text ?? "Ready"}</span>
         {status?.meta != null && (
           <>
-            <span className="h-3.5 w-px bg-border" />
+            <span className="sep" />
             <span>{status.meta}</span>
           </>
         )}
-        <div className="ml-auto flex items-center gap-3">
+        <div className="right-info">
           {status?.right}
-          <span className="h-3.5 w-px bg-border" />
+          {status?.right != null && <span className="sep" />}
           <span>{brand} · demo</span>
         </div>
       </footer>
