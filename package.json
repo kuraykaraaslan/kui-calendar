@@ -44,6 +44,7 @@
     "@tailwindcss/postcss": "^4.3.3",
     "@typescript/native": "npm:typescript@^7.0.2",
     "@vitejs/plugin-react": "^6.1.1",
+    "@vitest/coverage-v8": "^5.0.1",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@types/react": "^19.3.0",
@@ -68,6 +69,7 @@
     "preview:demo": "vite preview --config vite.config.demo.ts",
     "prepublishOnly": "pnpm build",
     "typecheck": "tsc --noEmit -p tsconfig.lib.json",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
   }
 }
