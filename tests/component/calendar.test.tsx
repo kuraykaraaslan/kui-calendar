@@ -92,9 +92,35 @@ describe('<Calendar /> month view', () => {
     const weekly: CalendarEvent = {
       id: 'w', title: 'Weekly', start: d(2026, 9, 7, 10), end: d(2026, 9, 7, 11), rrule: 'FREQ=WEEKLY;BYDAY=MO',
     };
-    renderCal({ events: [weekly] });
+    renderCal({ events: [weekly], recurrence: true });
     // Mondays 7, 14, 21, 28 September and 5 October are all inside the grid.
     expect(screen.getAllByRole('button', { name: 'Weekly — 10:00 to 11:00' })).toHaveLength(5);
+  });
+
+  it('shows a recurring event once, at its own start, unless recurrence is on', () => {
+    const weekly: CalendarEvent = {
+      id: 'w', title: 'Weekly', start: d(2026, 9, 7, 10), end: d(2026, 9, 7, 11), rrule: 'FREQ=WEEKLY;BYDAY=MO',
+    };
+    const { rerender } = renderCal({ events: [weekly] });
+    const only = screen.getAllByRole('button', { name: 'Weekly — 10:00 to 11:00' });
+    expect(only).toHaveLength(1);
+    expect(only[0]!.closest('[role="gridcell"]')).toHaveAccessibleName('Monday 7 September, 1 event');
+
+    rerender(<Calendar events={[weekly]} defaultDate={d(2026, 9, 24)} locale="en" recurrence />);
+    expect(screen.getAllByRole('button', { name: 'Weekly — 10:00 to 11:00' })).toHaveLength(5);
+    rerender(<Calendar events={[weekly]} defaultDate={d(2026, 9, 24)} locale="en" recurrence={false} />);
+    expect(screen.getAllByRole('button', { name: 'Weekly — 10:00 to 11:00' })).toHaveLength(1);
+  });
+
+  it('does not render a recurring event outside its base week when recurrence is off', () => {
+    const daily: CalendarEvent = {
+      id: 'dl', title: 'Daily', start: d(2026, 9, 1, 8), end: d(2026, 9, 1, 8, 30), rrule: 'FREQ=DAILY',
+    };
+    const { unmount } = renderCal({ view: 'week', events: [daily] });
+    expect(screen.queryByRole('button', { name: /^Daily/ })).not.toBeInTheDocument();
+    unmount();
+    renderCal({ view: 'week', events: [daily], recurrence: true });
+    expect(screen.getAllByRole('button', { name: 'Daily 08:00 – 08:30' })).toHaveLength(7);
   });
 });
 

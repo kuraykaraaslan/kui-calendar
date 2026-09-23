@@ -2,12 +2,19 @@ import { useMemo } from 'react';
 import type { CalendarEvent, EventOccurrence } from '../../modules/calendar/calendar.types';
 import { expandRRule, isException, parseRRule } from '../../modules/calendar/calendar.rrule';
 
+/**
+ * Expand RRULE events into concrete occurrences inside the window. With
+ * `enabled` false, events are returned as-is, so a recurring event shows
+ * once, at its own start (its base occurrence).
+ */
 export function useRecurrence(
   events: CalendarEvent[],
   windowStart: Date,
   windowEnd: Date,
+  enabled = true,
 ): EventOccurrence[] {
   return useMemo(() => {
+    if (!enabled) return events;
     const out: EventOccurrence[] = [];
     for (const ev of events) {
       if (!ev.rrule) {
@@ -37,5 +44,5 @@ export function useRecurrence(
       }
     }
     return out;
-  }, [events, windowStart.getTime(), windowEnd.getTime()]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [events, enabled, windowStart.getTime(), windowEnd.getTime()]); // eslint-disable-line react-hooks/exhaustive-deps
 }

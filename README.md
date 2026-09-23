@@ -102,7 +102,7 @@ unsub();
 
 ## Recurrence
 
-Pass an iCalendar [`RRULE`](https://datatracker.ietf.org/doc/html/rfc5545) string on any event; the engine expands it lazily, only for the visible window.
+Pass an iCalendar [`RRULE`](https://datatracker.ietf.org/doc/html/rfc5545) string on any event and set the `recurrence` prop on `<Calendar />`; occurrences are expanded lazily, only for the visible window. Expansion is **off by default**: without `recurrence`, a recurring event is shown once, at its own `start`. (In the vanilla core, `engine.expandOccurrences(events)` always expands.)
 
 ```ts
 { id: "e", title: "Standup", start, end, rrule: "FREQ=DAILY;INTERVAL=1;COUNT=10" }
@@ -122,7 +122,7 @@ Supported tokens: `FREQ` (`DAILY`/`WEEKLY`/`MONTHLY`/`YEARLY`), `INTERVAL`, `COU
 | `defaultDate` | `Date` | initial date (uncontrolled) |
 | `resources` | `Resource[]` | columns for the resource view |
 | `calendars` | `CalendarSource[]` | event sources for the legend |
-| `recurrence` | `boolean` | enable RRULE expansion |
+| `recurrence` | `boolean` | enable RRULE expansion (default `false`: a recurring event shows once, at its `start`) |
 | `locale` | `string` | `'en'` or `'tr'` (defaults to `tr`) |
 | `messages` | `Partial<CalendarMessages>` | string overrides |
 | `workingHours` | `{ start, end, days }` | shaded hours on grid views |

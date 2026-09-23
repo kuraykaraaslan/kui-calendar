@@ -107,6 +107,10 @@ export type CalendarProps = {
   calendars?: CalendarSource[];
   onCalendarToggle?: (calendarId: string, visible: boolean) => void;
   hideCalendarLegend?: boolean;
+  /**
+   * Expand `rrule` events into their occurrences. Default `false`: a
+   * recurring event is shown once, at its own `start`.
+   */
   recurrence?: boolean;
   locale?: string;
   messages?: Partial<CalendarMessages>;

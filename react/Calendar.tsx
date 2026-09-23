@@ -57,6 +57,7 @@ function CalendarInner({
   calendars,
   onCalendarToggle,
   hideCalendarLegend,
+  recurrence = false,
   onTelemetry,
   className,
 }: CalendarProps) {
@@ -85,7 +86,8 @@ function CalendarInner({
     [view, date, localeBundle.weekStart],
   );
 
-  const expanded = useRecurrence(events, windowStart, windowEnd);
+  // RRULE expansion is opt-in via the `recurrence` prop (default off).
+  const expanded = useRecurrence(events, windowStart, windowEnd, recurrence);
   const visibleEvents = useMemo(() => {
     if (!hiddenCalendarIds.size) return expanded;
     return expanded.filter((e) => !e.calendarId || !hiddenCalendarIds.has(e.calendarId));
