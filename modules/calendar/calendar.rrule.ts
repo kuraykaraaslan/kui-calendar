@@ -1,4 +1,4 @@
-import { addDays, addMonths, isSameDay, startOfDay } from './calendar.date-utils';
+import { addDays, isSameDay, startOfDay } from './calendar.date-utils';
 
 export type RRuleFreq = 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'YEARLY';
 
@@ -86,26 +86,44 @@ export function expandRRule(
     return out;
   }
 
-  let cursor = new Date(dtstart);
-  while (out.length < hardCap && cursor.getTime() <= stopAt.getTime()) {
-    emitIfInWindow(cursor);
-    if (rule.count && produced >= rule.count) return out;
-    cursor = stepFreq(cursor, rule.freq, rule.interval);
+  // Each candidate is computed from DTSTART rather than by stepping from the
+  // previous one, so a clamped or DST-shifted instance never drifts the rest
+  // of the series.
+  for (let i = 0; out.length < hardCap; i++) {
+    const steps = i * rule.interval;
+    const occ = nthCandidate(dtstart, rule.freq, steps);
+    if (!occ) {
+      // RFC 5545 §3.3.10: a candidate that is not a valid date (31 April,
+      // 29 February in a common year) is skipped and does not count. Stop
+      // once the month it would have fallen in is past the window.
+      const months = rule.freq === 'YEARLY' ? 12 * steps : steps;
+      const monthStart = new Date(dtstart.getFullYear(), dtstart.getMonth() + months, 1);
+      if (monthStart.getTime() > stopAt.getTime()) break;
+      continue;
+    }
+    if (occ.getTime() > stopAt.getTime()) break;
+    emitIfInWindow(occ);
+    if (rule.count && produced >= rule.count) break;
   }
   return out;
 }
 
-function stepFreq(d: Date, freq: RRuleFreq, interval: number): Date {
+/** The candidate `steps` periods after `dtstart`, or null if that date does not exist. */
+function nthCandidate(dtstart: Date, freq: RRuleFreq, steps: number): Date | null {
   switch (freq) {
-    case 'DAILY': return addDays(d, interval);
-    case 'WEEKLY': return addDays(d, 7 * interval);
-    case 'MONTHLY': return addMonths(d, interval);
-    case 'YEARLY': {
-      const x = new Date(d);
-      x.setFullYear(x.getFullYear() + interval);
-      return x;
-    }
+    case 'DAILY': return addDays(dtstart, steps);
+    case 'WEEKLY': return addDays(dtstart, 7 * steps);
+    case 'MONTHLY': return sameDayMonthsLater(dtstart, steps);
+    case 'YEARLY': return sameDayMonthsLater(dtstart, 12 * steps);
   }
+}
+
+function sameDayMonthsLater(d: Date, months: number): Date | null {
+  const x = new Date(
+    d.getFullYear(), d.getMonth() + months, d.getDate(),
+    d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds(),
+  );
+  return x.getDate() === d.getDate() ? x : null;
 }
 
 function withTimeOfDay(day: Date, time: Date): Date {
