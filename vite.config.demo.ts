@@ -30,7 +30,7 @@ export default defineConfig({
     alias: [
       { find: /^react$/, replacement: require.resolve("react") },
       { find: /^react-dom$/, replacement: require.resolve("react-dom") },
-      { find: "@", replacement: resolve(__dirname, ".") },
+      { find: "@", replacement: resolve(import.meta.dirname, ".") },
     ],
     dedupe: ["react", "react-dom"],
   },
