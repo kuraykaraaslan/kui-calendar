@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import { CalendarEngineContext } from '../CalendarEngineContext';
-import type { CalendarEngine } from '../../modules/calendar/calendar.engine';
+import { CalendarEngineContext } from '../CalendarEngineContext.js';
+import type { CalendarEngine } from '../../modules/calendar/calendar.engine.js';
 
 export function useCalendarEngine(): CalendarEngine {
   const engine = useContext(CalendarEngineContext);

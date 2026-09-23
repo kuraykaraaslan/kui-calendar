@@ -5,7 +5,7 @@ import type {
   CalendarSource,
   CalendarEvent,
   View,
-} from './calendar.types';
+} from './calendar.types.js';
 
 export type CalendarState = {
   date: Date;

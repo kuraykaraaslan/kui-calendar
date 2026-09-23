@@ -1,9 +1,9 @@
-import { cn } from '../../libs/utils/cn';
-import type { CalendarTelemetry, CalendarEvent, WorkingHours } from '../../modules/calendar/calendar.types';
-import { EventCard } from '../parts/EventCard';
-import { TimeGrid } from '../parts/TimeGrid';
-import { eventOnDay, isSameDay, rangeDays, startOfWeek } from '../../modules/calendar/calendar.date-utils';
-import type { LocaleBundle } from '../../modules/calendar/locale';
+import { cn } from '../../libs/utils/cn.js';
+import type { CalendarTelemetry, CalendarEvent, WorkingHours } from '../../modules/calendar/calendar.types.js';
+import { EventCard } from '../parts/EventCard.js';
+import { TimeGrid } from '../parts/TimeGrid.js';
+import { eventOnDay, isSameDay, rangeDays, startOfWeek } from '../../modules/calendar/calendar.date-utils.js';
+import type { LocaleBundle } from '../../modules/calendar/locale/index.js';
 
 type WeekViewProps = {
   date: Date;

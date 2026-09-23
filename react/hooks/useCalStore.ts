@@ -1,6 +1,6 @@
 import { useStore } from 'zustand/react';
-import { useCalendarEngine } from './useCalendarEngine';
-import type { CalendarStore, CalendarStoreApi } from '../../modules/calendar/calendar.store';
+import { useCalendarEngine } from './useCalendarEngine.js';
+import type { CalendarStore, CalendarStoreApi } from '../../modules/calendar/calendar.store.js';
 
 export function useCalStore<T>(selector: (s: CalendarStore) => T): T {
   const engine = useCalendarEngine();

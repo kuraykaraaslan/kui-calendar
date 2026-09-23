@@ -1,19 +1,19 @@
-import { createCalendarStore, type CalendarStore, type CalendarStoreApi } from './calendar.store';
-import { resolveLocale, mergeMessages, type LocaleBundle } from './locale';
+import { createCalendarStore, type CalendarStore, type CalendarStoreApi } from './calendar.store.js';
+import { resolveLocale, mergeMessages, type LocaleBundle } from './locale/index.js';
 import {
   addDays,
   addMonths,
   visibleWindow,
   periodLabel,
-} from './calendar.date-utils';
-import { expandRRule, isException, parseRRule } from './calendar.rrule';
+} from './calendar.date-utils.js';
+import { expandRRule, isException, parseRRule } from './calendar.rrule.js';
 import type {
   CalendarEvent,
   EventOccurrence,
   View,
   CalendarSource,
   CalendarProps,
-} from './calendar.types';
+} from './calendar.types.js';
 
 export type CalendarEngineOptions = {
   date?: Date;

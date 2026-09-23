@@ -1,8 +1,8 @@
-import { cn } from '../../libs/utils/cn';
-import type { CalendarEvent } from '../../modules/calendar/calendar.types';
-import { EventCard } from '../parts/EventCard';
-import { eventOnDay, isSameDay, isSameMonth, monthGrid } from '../../modules/calendar/calendar.date-utils';
-import type { LocaleBundle } from '../../modules/calendar/locale';
+import { cn } from '../../libs/utils/cn.js';
+import type { CalendarEvent } from '../../modules/calendar/calendar.types.js';
+import { EventCard } from '../parts/EventCard.js';
+import { eventOnDay, isSameDay, isSameMonth, monthGrid } from '../../modules/calendar/calendar.date-utils.js';
+import type { LocaleBundle } from '../../modules/calendar/locale/index.js';
 
 type MonthViewProps = {
   date: Date;

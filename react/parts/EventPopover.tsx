@@ -2,11 +2,11 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { cn } from '../../libs/utils/cn';
-import type { CalendarMessages, CalendarTelemetry, CalendarEvent } from '../../modules/calendar/calendar.types';
-import { effectiveColor, EVENT_COLOR_CLASSES } from '../../modules/calendar/calendar.colors';
-import { fmtTimeRange } from '../../modules/calendar/calendar.date-utils';
-import { useCalStore } from '../hooks/useCalStore';
+import { cn } from '../../libs/utils/cn.js';
+import type { CalendarMessages, CalendarTelemetry, CalendarEvent } from '../../modules/calendar/calendar.types.js';
+import { effectiveColor, EVENT_COLOR_CLASSES } from '../../modules/calendar/calendar.colors.js';
+import { fmtTimeRange } from '../../modules/calendar/calendar.date-utils.js';
+import { useCalStore } from '../hooks/useCalStore.js';
 
 const POPOVER_W = 280;
 const POPOVER_GAP = 8;

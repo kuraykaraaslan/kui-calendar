@@ -1,4 +1,4 @@
-import { HOUR_HEIGHT } from './calendar.date-utils';
+import { HOUR_HEIGHT } from './calendar.date-utils.js';
 
 export function yToMinutes(y: number, columnHeight: number): number {
   const clamped = Math.max(0, Math.min(columnHeight, y));

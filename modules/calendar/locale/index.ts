@@ -1,6 +1,6 @@
-import type { CalendarMessages } from '../calendar.types';
-import { TR_MESSAGES, TR_WEEK_START, TR_MONTH_NAMES, TR_DAY_SHORT, TR_DAY_LONG } from './tr';
-import { EN_MESSAGES, EN_WEEK_START, EN_MONTH_NAMES, EN_DAY_SHORT, EN_DAY_LONG } from './en';
+import type { CalendarMessages } from '../calendar.types.js';
+import { TR_MESSAGES, TR_WEEK_START, TR_MONTH_NAMES, TR_DAY_SHORT, TR_DAY_LONG } from './tr.js';
+import { EN_MESSAGES, EN_WEEK_START, EN_MONTH_NAMES, EN_DAY_SHORT, EN_DAY_LONG } from './en.js';
 
 export type LocaleBundle = {
   messages: CalendarMessages;

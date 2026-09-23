@@ -1,4 +1,4 @@
-import { addDays, isSameDay, startOfDay } from './calendar.date-utils';
+import { addDays, isSameDay, startOfDay } from './calendar.date-utils.js';
 
 export type RRuleFreq = 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'YEARLY';
 

@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { cn } from '../../libs/utils/cn';
-import type { CalendarEvent } from '../../modules/calendar/calendar.types';
-import { effectiveColor, EVENT_COLOR_CLASSES } from '../../modules/calendar/calendar.colors';
-import { useCalStore } from '../hooks/useCalStore';
-import { fmtTime } from '../../modules/calendar/calendar.date-utils';
+import { cn } from '../../libs/utils/cn.js';
+import type { CalendarEvent } from '../../modules/calendar/calendar.types.js';
+import { effectiveColor, EVENT_COLOR_CLASSES } from '../../modules/calendar/calendar.colors.js';
+import { useCalStore } from '../hooks/useCalStore.js';
+import { fmtTime } from '../../modules/calendar/calendar.date-utils.js';
 
 type Variant = 'pill' | 'bar' | 'stack';
 

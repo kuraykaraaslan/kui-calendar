@@ -1,4 +1,4 @@
-import type { EventColor } from './calendar.types';
+import type { EventColor } from './calendar.types.js';
 
 export const EVENT_COLOR_CLASSES: Record<EventColor, {
   pill: string;

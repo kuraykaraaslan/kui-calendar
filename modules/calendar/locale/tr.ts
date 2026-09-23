@@ -1,4 +1,4 @@
-import type { CalendarMessages } from '../calendar.types';
+import type { CalendarMessages } from '../calendar.types.js';
 
 export const TR_MESSAGES: CalendarMessages = {
   today: 'Bugün',

@@ -5,8 +5,8 @@ import {
   faArrowsRotate,
   faCalendar,
 } from '@fortawesome/free-solid-svg-icons';
-import { cn } from '../../libs/utils/cn';
-import type { View, CalendarMessages } from '../../modules/calendar/calendar.types';
+import { cn } from '../../libs/utils/cn.js';
+import type { View, CalendarMessages } from '../../modules/calendar/calendar.types.js';
 
 type HeaderBarProps = {
   label: string;

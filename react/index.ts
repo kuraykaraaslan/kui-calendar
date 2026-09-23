@@ -1,5 +1,5 @@
-export { Calendar } from './Calendar';
-export { MiniCalendar } from './parts/MiniCalendar';
+export { Calendar } from './Calendar.js';
+export { MiniCalendar } from './parts/MiniCalendar.js';
 
 export type {
   CalendarProps,
@@ -13,4 +13,4 @@ export type {
   WorkingHours,
   CalendarTelemetry,
   CalendarHandle,
-} from '../modules/calendar/calendar.types';
+} from '../modules/calendar/calendar.types.js';

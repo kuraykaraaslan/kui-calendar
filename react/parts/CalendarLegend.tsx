@@ -1,7 +1,7 @@
-import { cn } from '../../libs/utils/cn';
-import { EVENT_COLOR_CLASSES } from '../../modules/calendar/calendar.colors';
-import { useCalStore } from '../hooks/useCalStore';
-import type { CalendarMessages } from '../../modules/calendar/calendar.types';
+import { cn } from '../../libs/utils/cn.js';
+import { EVENT_COLOR_CLASSES } from '../../modules/calendar/calendar.colors.js';
+import { useCalStore } from '../hooks/useCalStore.js';
+import type { CalendarMessages } from '../../modules/calendar/calendar.types.js';
 
 type CalendarLegendProps = {
   messages: CalendarMessages;

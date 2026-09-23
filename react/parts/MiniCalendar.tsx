@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { cn } from '../../libs/utils/cn';
-import { addMonths, isSameDay, isSameMonth, monthGrid } from '../../modules/calendar/calendar.date-utils';
-import { resolveLocale } from '../../modules/calendar/locale';
+import { cn } from '../../libs/utils/cn.js';
+import { addMonths, isSameDay, isSameMonth, monthGrid } from '../../modules/calendar/calendar.date-utils.js';
+import { resolveLocale } from '../../modules/calendar/locale/index.js';
 
 type MiniCalendarProps = {
   value?: Date;

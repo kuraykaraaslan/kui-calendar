@@ -1,13 +1,13 @@
-export { CalendarEngine } from './calendar/calendar.engine';
-export type { CalendarEngineOptions } from './calendar/calendar.engine';
+export { CalendarEngine } from './calendar/calendar.engine.js';
+export type { CalendarEngineOptions } from './calendar/calendar.engine.js';
 
-export { createCalendarStore } from './calendar/calendar.store';
+export { createCalendarStore } from './calendar/calendar.store.js';
 export type {
   CalendarState,
   CalendarActions,
   CalendarStore,
   CalendarStoreApi,
-} from './calendar/calendar.store';
+} from './calendar/calendar.store.js';
 
 export type {
   View,
@@ -23,13 +23,13 @@ export type {
   CalendarSource,
   CalendarProps,
   CalendarHandle,
-} from './calendar/calendar.types';
+} from './calendar/calendar.types.js';
 
 export {
   EVENT_COLOR_CLASSES,
   resolveColor,
   effectiveColor,
-} from './calendar/calendar.colors';
+} from './calendar/calendar.colors.js';
 
 export {
   MS_DAY,
@@ -54,23 +54,23 @@ export {
   visibleWindow,
   snapMinutes,
   dateAtMinute,
-} from './calendar/calendar.date-utils';
+} from './calendar/calendar.date-utils.js';
 
 export {
   parseRRule,
   expandRRule,
   isException,
-} from './calendar/calendar.rrule';
-export type { RRuleFreq, ParsedRRule } from './calendar/calendar.rrule';
+} from './calendar/calendar.rrule.js';
+export type { RRuleFreq, ParsedRRule } from './calendar/calendar.rrule.js';
 
 export {
   resolveLocale,
   mergeMessages,
-} from './calendar/locale';
-export type { LocaleBundle } from './calendar/locale';
+} from './calendar/locale/index.js';
+export type { LocaleBundle } from './calendar/locale/index.js';
 
 export {
   yToMinutes,
   snapMinutesInt,
   hitTestDayColumn,
-} from './calendar/calendar.drag-math';
+} from './calendar/calendar.drag-math.js';

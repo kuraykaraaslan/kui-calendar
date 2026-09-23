@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { cn } from '../../libs/utils/cn';
-import { effectiveColor, EVENT_COLOR_CLASSES } from '../../modules/calendar/calendar.colors';
-import { fmtTime, fmtTimeRange, isSameDay, startOfDay } from '../../modules/calendar/calendar.date-utils';
-import { useCalStore } from '../hooks/useCalStore';
-import type { CalendarEvent } from '../../modules/calendar/calendar.types';
-import type { LocaleBundle } from '../../modules/calendar/locale';
+import { cn } from '../../libs/utils/cn.js';
+import { effectiveColor, EVENT_COLOR_CLASSES } from '../../modules/calendar/calendar.colors.js';
+import { fmtTime, fmtTimeRange, isSameDay, startOfDay } from '../../modules/calendar/calendar.date-utils.js';
+import { useCalStore } from '../hooks/useCalStore.js';
+import type { CalendarEvent } from '../../modules/calendar/calendar.types.js';
+import type { LocaleBundle } from '../../modules/calendar/locale/index.js';
 
 type AgendaViewProps = {
   events: CalendarEvent[];

@@ -1,15 +1,15 @@
-import { cn } from '../../libs/utils/cn';
-import { effectiveColor, EVENT_COLOR_CLASSES } from '../../modules/calendar/calendar.colors';
+import { cn } from '../../libs/utils/cn.js';
+import { effectiveColor, EVENT_COLOR_CLASSES } from '../../modules/calendar/calendar.colors.js';
 import {
   fmtTime,
   HOUR_HEIGHT,
   isSameDay,
   MIN_EVENT_HEIGHT,
   minutesIntoDay,
-} from '../../modules/calendar/calendar.date-utils';
-import { useCalStore } from '../hooks/useCalStore';
-import type { CalendarTelemetry, CalendarEvent, Resource, WorkingHours } from '../../modules/calendar/calendar.types';
-import type { LocaleBundle } from '../../modules/calendar/locale';
+} from '../../modules/calendar/calendar.date-utils.js';
+import { useCalStore } from '../hooks/useCalStore.js';
+import type { CalendarTelemetry, CalendarEvent, Resource, WorkingHours } from '../../modules/calendar/calendar.types.js';
+import type { LocaleBundle } from '../../modules/calendar/locale/index.js';
 
 type ResourceViewProps = {
   date: Date;

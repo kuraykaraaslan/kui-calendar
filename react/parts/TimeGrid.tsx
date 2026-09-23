@@ -1,17 +1,17 @@
-import { cn } from '../../libs/utils/cn';
-import type { CalendarTelemetry, CalendarEvent, WorkingHours } from '../../modules/calendar/calendar.types';
-import { effectiveColor, EVENT_COLOR_CLASSES } from '../../modules/calendar/calendar.colors';
+import { cn } from '../../libs/utils/cn.js';
+import type { CalendarTelemetry, CalendarEvent, WorkingHours } from '../../modules/calendar/calendar.types.js';
+import { effectiveColor, EVENT_COLOR_CLASSES } from '../../modules/calendar/calendar.colors.js';
 import {
   fmtTime,
   HOUR_HEIGHT,
   isSameDay,
   MIN_EVENT_HEIGHT,
   minutesIntoDay,
-} from '../../modules/calendar/calendar.date-utils';
-import { useCalStore } from '../hooks/useCalStore';
-import { useDragMove } from '../hooks/useDragMove';
-import { useResize } from '../hooks/useResize';
-import { useDragCreate } from '../hooks/useDragCreate';
+} from '../../modules/calendar/calendar.date-utils.js';
+import { useCalStore } from '../hooks/useCalStore.js';
+import { useDragMove } from '../hooks/useDragMove.js';
+import { useResize } from '../hooks/useResize.js';
+import { useDragCreate } from '../hooks/useDragCreate.js';
 
 type TimeGridProps = {
   days: Date[];

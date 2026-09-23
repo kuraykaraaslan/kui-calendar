@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import type { CalendarEvent, EventOccurrence } from '../../modules/calendar/calendar.types';
-import { expandRRule, isException, parseRRule } from '../../modules/calendar/calendar.rrule';
+import type { CalendarEvent, EventOccurrence } from '../../modules/calendar/calendar.types.js';
+import { expandRRule, isException, parseRRule } from '../../modules/calendar/calendar.rrule.js';
 
 /**
  * Expand RRULE events into concrete occurrences inside the window. With

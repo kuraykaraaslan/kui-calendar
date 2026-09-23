@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
-import type { CalendarTelemetry } from '../../modules/calendar/calendar.types';
-import { dateAtMinute } from '../../modules/calendar/calendar.date-utils';
-import { snapMinutesInt, yToMinutes } from '../../modules/calendar/calendar.drag-math';
-import { useCalStore, useCalStoreApi } from './useCalStore';
+import type { CalendarTelemetry } from '../../modules/calendar/calendar.types.js';
+import { dateAtMinute } from '../../modules/calendar/calendar.date-utils.js';
+import { snapMinutesInt, yToMinutes } from '../../modules/calendar/calendar.drag-math.js';
+import { useCalStore, useCalStoreApi } from './useCalStore.js';
 
 type Options = {
   days: Date[];
