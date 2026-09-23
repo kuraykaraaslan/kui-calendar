@@ -270,9 +270,14 @@ describe('time formatting', () => {
 
 describe('periodLabel', () => {
   it('labels month-scoped views with month and year', () => {
-    for (const view of ['month', 'agenda', 'resource'] as const) {
+    for (const view of ['month', 'agenda'] as const) {
       expect(periodLabel(view, d(2026, 9, 24), EN, 0)).toBe('September 2026');
     }
+  });
+
+  it('labels the resource view like the day view (it renders one day)', () => {
+    expect(periodLabel('resource', d(2026, 9, 24), EN, 0)).toBe('24 September 2026');
+    expect(periodLabel('resource', d(2026, 9, 24), EN, 0)).toBe(periodLabel('day', d(2026, 9, 24), EN, 0));
   });
 
   it('labels a week within one month compactly', () => {
@@ -308,6 +313,13 @@ describe('visibleWindow', () => {
     expect(fmt(s)).toBe('2026-11-01 00:00');
     expect(fmt(e)).toBe('2026-11-01 23:59');
     expect(e.getTime() - s.getTime()).toBe(25 * HOUR - 1);
+  });
+
+  it('spans one day for the resource view', () => {
+    const [s, e] = visibleWindow('resource', d(2026, 9, 24, 12), 0);
+    expect(fmt(s)).toBe('2026-09-24 00:00');
+    expect(fmt(e)).toBe('2026-09-24 23:59');
+    expect(visibleWindow('day', d(2026, 9, 24, 12), 0)).toEqual([s, e]);
   });
 });
 

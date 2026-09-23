@@ -256,6 +256,28 @@ describe('<Calendar /> views', () => {
     expect(screen.getByText('No resources defined')).toBeInTheDocument();
   });
 
+  it('labels and pages the resource view one day at a time', () => {
+    const onDateChange = vi.fn();
+    const resources = [{ id: 'a', name: 'Room A' }];
+    const events: CalendarEvent[] = [
+      { id: 'x', title: 'Thu slot', start: d(2026, 9, 24, 9), end: d(2026, 9, 24, 10), resourceId: 'a' },
+      { id: 'y', title: 'Fri slot', start: d(2026, 9, 25, 9), end: d(2026, 9, 25, 10), resourceId: 'a' },
+    ];
+    renderCal({ view: 'resource', resources, events, onDateChange });
+    expect(heading()).toHaveTextContent('24 September 2026');
+    expect(screen.getByRole('button', { name: 'Thu slot 09:00 – 10:00' })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    expect(heading()).toHaveTextContent('25 September 2026');
+    expect(onDateChange).toHaveBeenLastCalledWith(d(2026, 9, 25));
+    expect(screen.getByRole('button', { name: 'Fri slot 09:00 – 10:00' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /^Thu slot/ })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Previous' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Previous' }));
+    expect(heading()).toHaveTextContent('23 September 2026');
+  });
+
   it('lays events out per resource and flags double bookings', () => {
     const resources = [{ id: 'a', name: 'Room A' }, { id: 'b', name: 'Room B' }];
     const events: CalendarEvent[] = [

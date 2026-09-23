@@ -49,10 +49,19 @@ describe('CalendarEngine.navigate', () => {
   };
 
   it('steps a month in month-scoped views', () => {
-    for (const view of ['month', 'agenda', 'resource'] as const) {
+    for (const view of ['month', 'agenda'] as const) {
       expect(nav(view, d(2026, 9, 24), 'next')).toBe('2026-10-24 00:00');
       expect(nav(view, d(2026, 9, 24), 'prev')).toBe('2026-08-24 00:00');
     }
+  });
+
+  it('steps a day in the resource view, which renders a single day', () => {
+    expect(nav('resource', d(2026, 9, 24), 'next')).toBe('2026-09-25 00:00');
+    expect(nav('resource', d(2026, 9, 1), 'prev')).toBe('2026-08-31 00:00');
+    expect(nav('resource', d(2026, 12, 31), 'next')).toBe('2027-01-01 00:00');
+    const engine = new CalendarEngine({ date: d(2026, 9, 24), view: 'resource', locale: 'en' });
+    expect(engine.getPeriodLabel()).toBe('24 September 2026');
+    expect(engine.getVisibleWindow().map(fmt)).toEqual(['2026-09-24 00:00', '2026-09-24 23:59']);
   });
 
   it('steps a week in the week view and a day in the day view', () => {

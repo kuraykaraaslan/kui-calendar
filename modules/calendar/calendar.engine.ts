@@ -52,11 +52,12 @@ export class CalendarEngine {
       return;
     }
     const delta = dir === 'prev' ? -1 : 1;
-    if (view === 'month' || view === 'agenda' || view === 'resource') {
+    if (view === 'month' || view === 'agenda') {
       setDate(addMonths(date, delta));
     } else if (view === 'week') {
       setDate(addDays(date, 7 * delta));
     } else {
+      // 'day' and 'resource' (which renders a single day)
       setDate(addDays(date, delta));
     }
   }

@@ -105,8 +105,9 @@ function CalendarInner({
     [setStoreDate, onDateChange, onTelemetry],
   );
 
+  // 'day' and 'resource' (a single day) both fall through to one-day steps.
   const goPrev = useCallback(() => {
-    if (view === 'month' || view === 'agenda' || view === 'resource') {
+    if (view === 'month' || view === 'agenda') {
       setDate(addMonths(date, -1), 'prev');
     } else if (view === 'week') {
       setDate(addDays(date, -7), 'prev');
@@ -116,7 +117,7 @@ function CalendarInner({
   }, [view, date, setDate]);
 
   const goNext = useCallback(() => {
-    if (view === 'month' || view === 'agenda' || view === 'resource') {
+    if (view === 'month' || view === 'agenda') {
       setDate(addMonths(date, 1), 'next');
     } else if (view === 'week') {
       setDate(addDays(date, 7), 'next');

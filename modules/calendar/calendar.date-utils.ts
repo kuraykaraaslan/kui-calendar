@@ -114,7 +114,8 @@ export function periodLabel(
   weekStart: 0 | 1,
 ): string {
   const monthName = monthNames[date.getMonth()];
-  if (view === 'month' || view === 'agenda' || view === 'resource') {
+  // The resource view renders a single day, so it is labelled like 'day'.
+  if (view === 'month' || view === 'agenda') {
     return `${monthName} ${date.getFullYear()}`;
   }
   if (view === 'week') {
@@ -133,7 +134,8 @@ export function visibleWindow(
   date: Date,
   weekStart: 0 | 1,
 ): [Date, Date] {
-  if (view === 'month' || view === 'agenda' || view === 'resource') {
+  // 'resource' renders a single day and shares the 'day' window below.
+  if (view === 'month' || view === 'agenda') {
     const cells = monthGrid(date, weekStart);
     return [startOfDay(cells[0]!), endOfDay(cells[cells.length - 1]!)];
   }
