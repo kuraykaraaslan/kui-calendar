@@ -33,9 +33,18 @@ export function addDays(d: Date, n: number): Date {
   return x;
 }
 
+/**
+ * Add `n` calendar months, keeping the time of day. When the target month is
+ * shorter than the source day (31 Jan + 1), clamp to its last day (28/29 Feb)
+ * rather than letting `setMonth` overflow into the month after.
+ */
 export function addMonths(d: Date, n: number): Date {
   const x = new Date(d);
+  const day = x.getDate();
+  x.setDate(1);
   x.setMonth(x.getMonth() + n);
+  const lastDay = new Date(x.getFullYear(), x.getMonth() + 1, 0).getDate();
+  x.setDate(Math.min(day, lastDay));
   return x;
 }
 
@@ -62,9 +71,10 @@ export function monthGrid(d: Date, weekStart: 0 | 1): Date[] {
 }
 
 export function eventOnDay<E extends { start: Date; end: Date }>(e: E, day: Date): boolean {
-  const dayStart = startOfDay(day).getTime();
-  const dayEnd = dayStart + MS_DAY;
-  return e.start.getTime() < dayEnd && e.end.getTime() > dayStart;
+  const start = startOfDay(day);
+  // Next local midnight, not start + 24h: DST days are 23 or 25 hours long.
+  const dayEnd = addDays(start, 1).getTime();
+  return e.start.getTime() < dayEnd && e.end.getTime() > start.getTime();
 }
 
 export function fmtTime(d: Date): string {
