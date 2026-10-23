@@ -181,4 +181,4 @@ pnpm test         # Vitest
 
 ## License
 
-[Apache-2.0](./LICENSE) © 2026 Kuray Karaaslan
+[Apache-2.0](./LICENSE) © 2026 Kuray Karaaslan. A copy keeps the [NOTICE](./NOTICE) file.

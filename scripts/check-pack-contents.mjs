@@ -13,6 +13,14 @@ import { fileURLToPath } from 'node:url';
 /** Paths a published tarball must never hold: source maps of any kind. */
 export const FORBIDDEN = [/\.map$/];
 
+/** Files a published tarball must hold: the Apache License asks a copy to keep both (section 4). */
+export const REQUIRED = ['LICENSE', 'NOTICE'];
+
+/** The required files a tarball listing lacks. */
+export function missingFiles(paths) {
+  return REQUIRED.filter((f) => !paths.includes(f));
+}
+
 /** The paths of a tarball listing that match a forbidden pattern. */
 export function forbiddenFiles(paths) {
   return paths.filter((p) => FORBIDDEN.some((re) => re.test(p)));
@@ -34,6 +42,11 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
   const files = packedFiles(root);
   const bad = forbiddenFiles(files);
+  const missing = missingFiles(files);
+  if (missing.length) {
+    console.error(`check-pack-contents: the tarball would lack ${missing.join(', ')}`);
+    process.exit(1);
+  }
   if (bad.length) {
     console.error(`check-pack-contents: the tarball would publish ${bad.length} source map(s):\n  ${bad.slice(0, 20).join('\n  ')}`);
     process.exit(1);

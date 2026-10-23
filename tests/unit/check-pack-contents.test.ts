@@ -3,7 +3,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 // @ts-ignore plain-JS script, no declarations
-import { forbiddenFiles, mapsEnabled } from '../../scripts/check-pack-contents.mjs';
+import { forbiddenFiles, mapsEnabled, missingFiles } from '../../scripts/check-pack-contents.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const configs = readdirSync(root).filter((f) => /^(vite\.config.*\.ts|tsconfig.*\.json)$/.test(f));
@@ -11,6 +11,11 @@ const configs = readdirSync(root).filter((f) => /^(vite\.config.*\.ts|tsconfig.*
 describe('check-pack-contents', () => {
   it('flags source maps and declaration maps, and nothing else', () => {
     expect(forbiddenFiles(['dist/index.js', 'dist/index.js.map', 'dist/types/index.d.ts.map', 'README.md'])).toEqual(['dist/index.js.map', 'dist/types/index.d.ts.map']);
+  });
+
+  it('asks for the LICENSE and the NOTICE the Apache License wants a copy to keep', () => {
+    expect(missingFiles(['LICENSE', 'NOTICE', 'dist/index.js'])).toEqual([]);
+    expect(missingFiles(['LICENSE', 'dist/index.js'])).toEqual(['NOTICE']);
   });
 
   it('reads a map setting in any of its forms', () => {

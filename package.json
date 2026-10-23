@@ -22,7 +22,7 @@
     },
     "./styles.css": "./dist/styles.css"
   },
-  "files": ["dist", "!dist/**/*.map", "README.md", "LICENSE"],
+  "files": ["dist", "!dist/**/*.map", "README.md", "LICENSE", "NOTICE"],
   "sideEffects": ["**/*.css"],
   "peerDependencies": {
     "react": "^18 || ^19",
