@@ -28,6 +28,7 @@ export default defineConfig({
     outDir: "dist",
     emptyOutDir: false,
     target: "es2022",
-    sourcemap: true,
+    // No source map: a map carries the original source (sourcesContent). scripts/check-pack-contents.mjs keeps it so.
+    sourcemap: false,
   },
 });

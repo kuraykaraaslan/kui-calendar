@@ -22,7 +22,7 @@
     },
     "./styles.css": "./dist/styles.css"
   },
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": ["dist", "!dist/**/*.map", "README.md", "LICENSE"],
   "sideEffects": ["**/*.css"],
   "peerDependencies": {
     "react": "^18 || ^19",
@@ -69,7 +69,7 @@
     "build": "pnpm build:js && pnpm build:types && pnpm build:css",
     "build:demo": "vite build --config vite.config.demo.ts",
     "preview:demo": "vite preview --config vite.config.demo.ts",
-    "prepublishOnly": "pnpm build",
+    "prepublishOnly": "pnpm build && node scripts/check-pack-contents.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.lib.json",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
